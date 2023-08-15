@@ -1,4 +1,4 @@
-import { db } from "../database/db.connection";
+import { db } from "../database/db.connection.js";
 
 export default class PostRepository {
 

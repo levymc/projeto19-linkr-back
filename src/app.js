@@ -13,6 +13,6 @@ app.use(router);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Running server on port ${PORT}`);
+  console.log(`Running Linkr API on port ${PORT}`);
   startActivityMonitoring();
 });
