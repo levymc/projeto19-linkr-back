@@ -4,8 +4,8 @@
 
 Create a new user account.
 
--   **URL**: `POST /signup`
--   **Request Body**:
+- **URL**: `POST /signup`
+- **Request Body**:
 
 ```
 {
@@ -17,14 +17,14 @@ Create a new user account.
 
 ```
 
--   **Response**: Returns the newly created user and an authentication token.
+- **Response**: Returns the newly created user and an authentication token.
 
 ### Sign In
 
 Authenticate an existing user.
 
--   **URL**: `POST /signin`
--   **Request Body**:
+- **URL**: `POST /signin`
+- **Request Body**:
 
 ```
 {
@@ -34,14 +34,25 @@ Authenticate an existing user.
 
 ```
 
--   **Response**: Returns the user's ID and an authentication token.
+- **Response**: Returns the user's ID and an authentication token.
 
 ### Logout
 
 Log out a user by invalidating their session.
 
--   **URL**: `DELETE /logout`
--   **Headers**:
+- **URL**: `DELETE /logout`
+- **Headers**:
+
+```
+makefileCopy codeAuthorization: Bearer <token>
+```
+
+### Activity time reset
+
+Log out a user by invalidating their session.
+
+- **URL**: `POST /active`
+- **Headers**:
 
 ```
 makefileCopy codeAuthorization: Bearer <token>

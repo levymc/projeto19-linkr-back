@@ -41,7 +41,6 @@ export async function getActiveSession(userId) {
     throw new Error("An error occurred while fetching active session.");
   }
 }
-
 export async function createSessionWithToken(userId, token) {
   try {
     const result = await db.query(
@@ -76,5 +75,27 @@ export async function deleteSessionByToken(token) {
   } catch (error) {
     console.error("Error during session deletion:", error);
     throw new Error("An error occurred during session deletion.");
+  }
+}
+
+export async function getAllActiveSessions() {
+  try {
+    const result = await db.query('SELECT * FROM "sessions"');
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching active sessions:", error);
+    throw new Error("An error occurred while fetching active sessions.");
+  }
+}
+
+export async function updateSessionActivity(token) {
+  try {
+    await db.query(
+      'UPDATE "sessions" SET "createdAt" = NOW() WHERE "token" = $1',
+      [token]
+    );
+  } catch (error) {
+    console.error("Error updating session activity:", error);
+    throw new Error("An error occurred while updating session activity.");
   }
 }

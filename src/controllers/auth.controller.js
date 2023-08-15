@@ -50,6 +50,7 @@ export async function signIn(req, res) {
     const token = jwt.sign({ userId: user.userId }, secretKey);
 
     const session = await userRepo.createSessionWithToken(user.userId, token);
+    await userRepo.updateSessionActivity(session.token);
     res.send({ id: user.userId, token });
   } catch (err) {
     res.status(500).send(err.message);
@@ -65,18 +66,54 @@ export async function logout(req, res) {
   const token = authHeader.split(" ")[1];
 
   try {
-    console.log("Token received:", token);
-
     const session = await userRepo.findSessionDB(token);
     if (!session) {
       return res.status(401).send({ message: "Invalid session token." });
     }
 
-    await userRepo.deleteSessionByToken(token);
+    // Calculate the time difference between current time and session creation time
+    const currentTime = new Date();
+    const sessionCreationTime = new Date(session.createdat); // Use lowercase "createdat" to match column name
+    const timeDifferenceInMillis = currentTime - sessionCreationTime;
+    const oneMinuteInMillis = 1 * 60 * 1000; // 1 minute in milliseconds
 
+    if (timeDifferenceInMillis > oneMinuteInMillis) {
+      // User is inactive for 1 minute, perform logout action
+      await userRepo.deleteSessionByToken(token);
+      return res.send({ message: "User inactive, logout successful." });
+    }
+
+    // User is active, continue with regular logout
+    await userRepo.deleteSessionByToken(token);
     res.send({ message: "Logout successful." });
   } catch (err) {
     console.error("Error during logout:", err);
     res.status(500).send({ error: "An error occurred during logout." });
+  }
+}
+
+export async function resetActivityTimer(req, res) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).send({ message: "Authorization header missing." });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const session = await userRepo.findSessionDB(token);
+    if (!session) {
+      return res.status(401).send({ message: "Invalid session token." });
+    }
+
+    await userRepo.updateSessionActivity(token);
+
+    res.send({ message: "Activity timer reset." });
+  } catch (err) {
+    console.error("Error during activity timer reset:", err);
+    res
+      .status(500)
+      .send({ error: "An error occurred during activity timer reset." });
   }
 }
