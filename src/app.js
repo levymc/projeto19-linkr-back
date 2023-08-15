@@ -17,6 +17,6 @@ app.use(router);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`
-    API Projeto 16 na porta ${PORT},
+    API Linkr na porta ${PORT},
     Url: http://localhost:${PORT} 
 `));
