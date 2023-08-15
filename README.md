@@ -41,19 +41,12 @@ Authenticate an existing user.
 Log out a user by invalidating their session.
 
 - **URL**: `DELETE /logout`
-- **Headers**:
+- **Headers**: `Authorization: Bearer <token>`
 
-```
-makefileCopy codeAuthorization: Bearer <token>
-```
+
 
 ### Activity time reset
-
-Log out a user by invalidating their session.
-
+Reset time for automatic user logout
 - **URL**: `POST /active`
-- **Headers**:
+- **Headers**: `Authorization: Bearer <token>`
 
-```
-makefileCopy codeAuthorization: Bearer <token>
-```
