@@ -31,19 +31,19 @@ export async function signIn(req, res) {
     const user = await userRepo.getUserByEmail(email);
 
     if (!user) {
-      return res.status(401).send({ message: "E-mail não cadastrado!" });
+      return res.status(401).send({ message: "Email not registered!" });
     }
 
     const isPasswordCorrect = bcrypt.compareSync(password, user.password);
     if (!isPasswordCorrect) {
-      return res.status(401).send({ message: "Senha incorreta!" });
+      return res.status(401).send({ message: "Incorrect password!" });
     }
 
     const activeSession = await userRepo.getActiveSession(user.userId);
     if (activeSession) {
       return res
         .status(401)
-        .send({ message: "Usuário já possui uma sessão ativa." });
+        .send({ message: "User already has an active session." });
     }
 
     const token = jwt.sign({ userId: user.userId }, secretKey);
@@ -55,6 +55,7 @@ export async function signIn(req, res) {
     res.status(500).send(err.message);
   }
 }
+
 export async function logout(req, res) {
   const authHeader = req.headers.authorization;
   const token = authHeader.split(" ")[1];
