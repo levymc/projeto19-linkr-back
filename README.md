@@ -42,11 +42,3 @@ Log out a user by invalidating their session.
 
 - **URL**: `DELETE /logout`
 - **Headers**: `Authorization: Bearer <token>`
-
-
-
-### Activity time reset
-Reset time for automatic user logout
-- **URL**: `POST /active`
-- **Headers**: `Authorization: Bearer <token>`
-
