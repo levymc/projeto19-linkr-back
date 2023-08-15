@@ -2,17 +2,17 @@ import { db } from "../database/db.connection.js";
 
 export default class PostRepository {
 
-    async createPost(userId, content, postUrl, createdAt) {
+    async createPost(userId, content, postUrl) {
         const query = `
-            INSERT INTO public.posts ("userId", content, "postUrl", "createdAt")
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO public.posts ("userId", content, "postUrl")
+            VALUES ($1, $2, $3)
             RETURNING *;
         `;
-        const values = [userId, content, postUrl, createdAt];
+        const values = [userId, content, postUrl]
 
         try {
-            const result = await db.query(query, values);
-            return result.rows[0];
+            const result = await db.query(query, values)
+            return result.rows[0]
         } catch (error) {
             console.error(error)
             return false
