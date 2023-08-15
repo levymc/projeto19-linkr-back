@@ -1,6 +1,6 @@
 import * as userRepo from "../repositories/auth.repository.js";
 
-const ACTIVITY_TIMEOUT = 60000; // 1 minute
+const ACTIVITY_TIMEOUT = 300000; // 5 minute
 
 export async function startActivityMonitoring() {
   setInterval(async () => {
