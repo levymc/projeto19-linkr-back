@@ -8,11 +8,7 @@ import {
 import { validateSchema } from "../middlewares/validateSchema.js";
 import { validateAuth } from "../middlewares/validateAuth.js";
 
-import {
-  userSchema,
-  authSchema,
-  tokenSchema,
-} from "../schemas/auth.schemas.js";
+import { userSchema, authSchema } from "../schemas/auth.schemas.js";
 
 const userRouter = Router();
 
