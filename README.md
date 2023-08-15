@@ -1,38 +1,48 @@
-post localhost:5000/signin
+## API Endpoints
 
-````json{
+### Sign Up
 
-"email": "test@example.com",
+Create a new user account.
 
-"password": "root",
+-   **URL**: `POST /signup`
+-   **Request Body**:
 
-"name": "Test User",
+```
+{
+  "email": "test@example.com",
+  "password": "root",
+  "name": "Test User",
+  "imageUrl": "https://image.jpg"
+}
 
-"imageUrl": "https://image.jpg"
+```
 
-}```
+-   **Response**: Returns the newly created user and an authentication token.
 
+### Sign In
 
-post localhost:5000/signup
+Authenticate an existing user.
 
+-   **URL**: `POST /signin`
+-   **Request Body**:
 
-```json{
+```
+{
+  "email": "test@example.com",
+  "password": "root"
+}
 
-"email": "test@example.com",
+```
 
-"password": "root",
+-   **Response**: Returns the user's ID and an authentication token.
 
-"name": "Test User",
+### Logout
 
-"imageUrl": "https://image.jpg"
+Log out a user by invalidating their session.
 
-}```
+-   **URL**: `DELETE /logout`
+-   **Headers**:
 
-delete
-
-localhost:5000/logout
-
-Hearders
-
-Authorization Bearer token
-````
+```
+makefileCopy codeAuthorization: Bearer <token>
+```
