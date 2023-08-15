@@ -17,8 +17,7 @@ export async function signUp(req, res) {
     }
     const hash = bcrypt.hashSync(password, 10);
     const user = await userRepo.createUser(email, hash, name, imageUrl);
-    const token = jwt.sign({ userId: user.userId }, secretKey);
-    res.json({ user, token });
+    res.json({ user });
   } catch (error) {
     console.error("Error during sign-up:", error);
     res.status(500).json({ error: "An error occurred during user creation." });
@@ -71,19 +70,16 @@ export async function logout(req, res) {
       return res.status(401).send({ message: "Invalid session token." });
     }
 
-   
     const currentTime = new Date();
-    const sessionCreationTime = new Date(session.createdat); 
+    const sessionCreationTime = new Date(session.createdat);
     const timeDifferenceInMillis = currentTime - sessionCreationTime;
     const oneMinuteInMillis = 1 * 60 * 1000; // 1 minute in milliseconds
 
     if (timeDifferenceInMillis > oneMinuteInMillis) {
-      
       await userRepo.deleteSessionByToken(token);
       return res.send({ message: "User inactive, logout successful." });
     }
 
-   
     await userRepo.deleteSessionByToken(token);
     res.send({ message: "Logout successful." });
   } catch (err) {
