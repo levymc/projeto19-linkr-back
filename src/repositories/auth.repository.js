@@ -58,36 +58,6 @@ export function findSessionDB(token) {
   return db.query(`SELECT "userId" FROM sessions WHERE token = $1;`, [token]);
 }
 
-export async function getUserById(userId) {
-  try {
-    const result = await db.query('SELECT * FROM "users" WHERE "userId" = $1', [
-      userId,
-    ]);
-    return result.rows[0];
-  } catch (error) {
-    console.error("Error fetching user by ID:", error);
-    throw new Error("An error occurred while fetching user by ID.");
-  }
-}
-export async function deleteSessionByToken(token) {
-  try {
-    await db.query('DELETE FROM "sessions" WHERE "token" = $1', [token]);
-  } catch (error) {
-    console.error("Error during session deletion:", error);
-    throw new Error("An error occurred during session deletion.");
-  }
-}
-
-export async function getAllActiveSessions() {
-  try {
-    const result = await db.query('SELECT * FROM "sessions"');
-    return result.rows;
-  } catch (error) {
-    console.error("Error fetching active sessions:", error);
-    throw new Error("An error occurred while fetching active sessions.");
-  }
-}
-
 export async function updateSessionActivity(token) {
   try {
     await db.query(
@@ -99,3 +69,29 @@ export async function updateSessionActivity(token) {
     throw new Error("An error occurred while updating session activity.");
   }
 }
+
+export function deleteTokenFromDB(token) {
+  return db.query(`DELETE FROM sessions WHERE token = $1;`, [token]);
+}
+
+// export async function getUserById(userId) {
+//   try {
+//     const result = await db.query('SELECT * FROM "users" WHERE "userId" = $1', [
+//       userId,
+//     ]);
+//     return result.rows[0];
+//   } catch (error) {
+//     console.error("Error fetching user by ID:", error);
+//     throw new Error("An error occurred while fetching user by ID.");
+//   }
+// }
+
+// export async function getAllActiveSessions() {
+//   try {
+//     const result = await db.query('SELECT * FROM "sessions"');
+//     return result.rows;
+//   } catch (error) {
+//     console.error("Error fetching active sessions:", error);
+//     throw new Error("An error occurred while fetching active sessions.");
+//   }
+// }
