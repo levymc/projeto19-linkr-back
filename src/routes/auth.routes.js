@@ -19,6 +19,6 @@ const userRouter = Router();
 userRouter.post("/signup", validateSchema(userSchema), signUp);
 userRouter.post("/signin", validateSchema(authSchema), signIn);
 userRouter.delete("/logout", validateAuth, logout);
-userRouter.post("/reset-activity-timer", validateAuth, resetActivityTimer);
+userRouter.post("/active", validateAuth, resetActivityTimer);
 
 export default userRouter;
