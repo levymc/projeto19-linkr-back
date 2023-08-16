@@ -19,6 +19,20 @@ export default class PostRepository {
         }
     }
 
+    async getPosts() { // limitado a 20 posts
+        const query = `
+            SELECT * FROM public.posts
+            ORDER BY "createdAt" desc LIMIT 20
+        `
+        try {
+            const result = await db.query(query);
+            return result.rows
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
+
     async getPostById(postId) {
         const query = `
             SELECT * FROM public.posts
