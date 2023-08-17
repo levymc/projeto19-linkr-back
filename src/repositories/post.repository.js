@@ -2,7 +2,7 @@ import { db } from "../database/db.connection.js";
 
 export default class PostRepository {
 
-    async createPost(userId, content, postUrl) {
+    async createPost(userId, content, postUrl, timestamp) {
         const query = `
             INSERT INTO public.posts ("userId", content, "postUrl")
             VALUES ($1, $2, $3)

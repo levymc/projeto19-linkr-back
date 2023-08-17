@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import router from "./routes/index.routes.js";
 
-import { startActivityMonitoring } from "./repositories/activity.monitor.js";
+//import { startActivityMonitoring } from "./repositories/activity.monitor.js";
 
 dotenv.config()
 
@@ -17,6 +17,6 @@ const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
 
     console.log(`Running Linkr API on port ${PORT}`)
-    startActivityMonitoring()
+    //startActivityMonitoring()
 })
 
