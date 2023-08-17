@@ -47,10 +47,8 @@ export async function signIn(req, res) {
     }
 
     const token = jwt.sign({ userId: user.userId }, secretKey);
-
     const session = await userRepo.createSessionWithToken(user.userId, token);
-    // await userRepo.updateSessionActivity(session.token);
-    res.send({ id: user.userId, token });
+    res.send({ id: user.userId, token, imageUrl: user.imageUrl }); // Include imageUrl in the response
   } catch (err) {
     res.status(500).send(err.message);
   }

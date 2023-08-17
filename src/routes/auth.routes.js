@@ -9,6 +9,6 @@ const userRouter = Router();
 
 userRouter.post("/sign-up", validateSchema(userSchema), signUp);
 userRouter.post("/sign-in", validateSchema(authSchema), signIn);
-userRouter.delete("/logout", validateAuth, logout);
+userRouter.post("/logout", validateAuth, logout);
 
 export default userRouter;
