@@ -19,9 +19,10 @@ export async function createUser(email, password, name, imageUrl) {
 
 export async function getUserByEmail(email) {
   try {
-    const result = await db.query('SELECT * FROM "users" WHERE "email" = $1', [
-      email,
-    ]);
+    const result = await db.query(
+      'SELECT "userId", "email", "password", "name", "imageUrl" FROM "users" WHERE "email" = $1',
+      [email]
+    );
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching user by email:", error);
