@@ -7,8 +7,8 @@ import { userSchema, authSchema } from "../schemas/auth.schemas.js";
 
 const userRouter = Router();
 
-userRouter.post("/signup", validateSchema(userSchema), signUp);
-userRouter.post("/signin", validateSchema(authSchema), signIn);
+userRouter.post("/sign-up", validateSchema(userSchema), signUp);
+userRouter.post("/sign-in", validateSchema(authSchema), signIn);
 userRouter.delete("/logout", validateAuth, logout);
 
 export default userRouter;
