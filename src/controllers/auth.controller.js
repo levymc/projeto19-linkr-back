@@ -13,7 +13,7 @@ export async function signUp(req, res) {
     if (existingUser) {
       return res
         .status(409)
-        .json({ error: "User with this email already exists." });
+        .send({ message: "User with this email already exists." });
     }
     const hash = bcrypt.hashSync(password, 10);
     const user = await userRepo.createUser(email, hash, name, imageUrl);
@@ -23,7 +23,6 @@ export async function signUp(req, res) {
     res.status(500).json({ error: "An error occurred during user creation." });
   }
 }
-
 export async function signIn(req, res) {
   const { email, password } = req.body;
 
@@ -39,15 +38,17 @@ export async function signIn(req, res) {
       return res.status(401).send({ message: "Incorrect password!" });
     }
 
-    const activeSession = await userRepo.getActiveSession(user.userId);
-    if (activeSession) {
-      return res
-        .status(401)
-        .send({ message: "User already has an active session." });
+    let session = await userRepo.getActiveSession(user.userId);
+    let token = jwt.sign({ userId: user.userId }, secretKey, {
+      expiresIn: "1d",
+    });
+
+    if (session) {
+      await userRepo.updateSessionTokenAndActivity(session.token, token);
+    } else {
+      session = await userRepo.createSessionWithToken(user.userId, token);
     }
 
-    const token = jwt.sign({ userId: user.userId }, secretKey);
-    const session = await userRepo.createSessionWithToken(user.userId, token);
     res.send({ id: user.userId, token, imageUrl: user.imageUrl });
   } catch (err) {
     res.status(500).send(err.message);
