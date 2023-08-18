@@ -5,10 +5,10 @@ import { validateAuth } from "../middlewares/validateAuth.js";
 
 import { userSchema, authSchema } from "../schemas/auth.schemas.js";
 
-const userRouter = Router();
+const authRouter = Router();
 
-userRouter.post("/sign-up", validateSchema(userSchema), signUp);
-userRouter.post("/sign-in", validateSchema(authSchema), signIn);
-userRouter.post("/logout", validateAuth, logout);
+authRouter.post("/sign-up", validateSchema(userSchema), signUp);
+authRouter.post("/sign-in", validateSchema(authSchema), signIn);
+authRouter.post("/logout", validateAuth, logout);
 
-export default userRouter;
+export default authRouter;
