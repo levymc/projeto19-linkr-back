@@ -4,7 +4,7 @@
 
 Create a new user account.
 
-- **URL**: `POST /signup`
+- **URL**: `POST /sign-up`
 - **Request Body**:
 
 ```
@@ -23,7 +23,7 @@ Create a new user account.
 
 Authenticate an existing user.
 
-- **URL**: `POST /signin`
+- **URL**: `POST /sign-in`
 - **Request Body**:
 
 ```
