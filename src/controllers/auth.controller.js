@@ -50,11 +50,11 @@ export async function signIn(req, res) {
       session = await userRepo.createSessionWithToken(user.userId, token);
     }
 
-    const token = jwt.sign({ userId: user.userId }, String(process.env.SECRET_KEY));
+    const createdToken = jwt.sign({ userId: user.userId }, String(process.env.SECRET_KEY));
     console.log(token)
-    const session = await userRepo.createSessionWithToken(user.userId, token);
+    const sessionCreated = await userRepo.createSessionWithToken(user.userId, createdToken);
 
-    res.send({ id: user.userId, token, imageUrl: user.imageUrl });
+    res.send({ id: user.userId, createdToken, imageUrl: user.imageUrl });
   } catch (err) {
     res.status(500).send(err.message);
   }
