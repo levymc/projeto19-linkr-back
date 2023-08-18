@@ -58,6 +58,18 @@ export async function editPosts (req, res) {
     }
 }
 
+export async function deletePost(req, res){
+    const {id} = req.params
+    try{
+        const post = await postRepo.sendPost(id);
+        if(!post) return res.sendStatus(404);
+        const delPost = await postRepo.deletarPost(id)
+        if(delPost) return res.sendStatus(200)
+    }catch(err){
+        res.status(500).send(err)
+    }
+}
+
 export async function getMetadata (req, res, next){
     const url = req.body.postUrl;
     if (!url) {
@@ -70,14 +82,4 @@ export async function getMetadata (req, res, next){
         next()
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching metadata' });
-export async function deletePost(req, res){
-    const {id} = req.params
-    try{
-        const post = await postRepo.sendPost(id);
-        if(!post) return res.sendStatus(404);
-        const delPost = await postRepo.deletarPost(id)
-        if(delPost) return res.sendStatus(200)
-    }catch(err){
-        res.status(500).send(err)
-    }
-}
+    }}
