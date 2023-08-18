@@ -1,7 +1,9 @@
 import PostRepository from "../repositories/post.repository.js"
+import { getUserById } from "../repositories/auth.repository.js"
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
+import urlMetadata from "url-metadata"
 
 const postRepo = new PostRepository()
 
@@ -13,10 +15,16 @@ const timezoneName = 'America/Sao_Paulo';
 export async function newPost(req, res){
     req.body.userId = 1
     const timestampAtual = Date.now();
-    console.log(timestampAtual);
+    console.log(req.body.metadata['og:image']);
     try{
-        //const insertedPost = await postRepo.createPost(1, req.body.content, req.body.postUrl)
-        const insertedPost = await postRepo.createPost(1, "texto que o usuario digitou", 5466, timestampAtual)
+        const insertedPost = await postRepo.createPost(
+                                                        res.locals.userId, 
+                                                        req.body.content, 
+                                                        req.body.postUrl,
+                                                        req.body.metadata['og:image'],
+                                                        req.body.metadata['og:title'],
+                                                        req.body.metadata['og:description']
+                                                    )
         if (insertedPost) return res.status(201).send(insertedPost)
     }catch(err){
         console.error("Erro na criação de Post: ",err)
@@ -27,10 +35,10 @@ export async function newPost(req, res){
 export async function getPosts (req, res) {
     try{
         const posts = await postRepo.getPosts()
-        const user = "" // vem as informações do usuario para enviar o nome e a imagem na postagem
+        // const user = await getUserById(res.locals.userId)
         const response = {
             posts: posts,
-            user: user
+            // user: user
         }
         if (posts) return res.status(200).send(response)
     }catch(err){
@@ -47,5 +55,20 @@ export async function editPosts (req, res) {
         if(updatePost) return res.sendStatus(200)
     }catch(err){
         res.status(500).send(err)
+    }
+}
+
+export async function getMetadata (req, res, next){
+    const url = req.body.postUrl;
+    if (!url) {
+        return res.status(400).json({ error: 'URL not provided' });
+    }
+
+    try {
+        const metadata = await urlMetadata(url);
+        req.body.metadata = metadata
+        next()
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while fetching metadata' });
     }
 }

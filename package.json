@@ -14,7 +14,9 @@
     "nodemon": "^2.0.22"
   },
   "dependencies": {
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
+    "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "dayjs": "^1.11.9",
     "dotenv": "^16.0.3",
@@ -23,6 +25,7 @@
     "jsonwebtoken": "^9.0.1",
     "nanoid": "^4.0.2",
     "pg": "^8.11.0",
+    "url-metadata": "^3.0.2",
     "uuid": "^9.0.0"
   }
 }
