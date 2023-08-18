@@ -17,6 +17,8 @@ export async function createUser(email, password, name, imageUrl) {
   }
 }
 
+
+
 export async function getUserByEmail(email) {
   try {
     const result = await db.query(
@@ -75,17 +77,17 @@ export function deleteTokenFromDB(token) {
   return db.query(`DELETE FROM sessions WHERE token = $1;`, [token]);
 }
 
-// export async function getUserById(userId) {
-//   try {
-//     const result = await db.query('SELECT * FROM "users" WHERE "userId" = $1', [
-//       userId,
-//     ]);
-//     return result.rows[0];
-//   } catch (error) {
-//     console.error("Error fetching user by ID:", error);
-//     throw new Error("An error occurred while fetching user by ID.");
-//   }
-// }
+export async function getUserById(userId) {
+  try {
+    const result = await db.query('SELECT * FROM "users" WHERE "userId" = $1', [
+      userId,
+    ]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    throw new Error("An error occurred while fetching user by ID.");
+  }
+}
 
 // export async function getAllActiveSessions() {
 //   try {

@@ -7,8 +7,12 @@ export async function validateAuth(req, res, next) {
 
   try {
     const session = await findSessionDB(token);
+    console.log(session)
     if (session.rowCount === 0) return res.sendStatus(401);
     res.locals.userId = session.rows[0].userId;
+
+
+
 
     next();
   } catch (err) {
