@@ -1,30 +1,17 @@
-import axios from 'axios'
-import cheerio from 'cheerio'
+import urlMetadata from "url-metadata"
 
 export async function getMetadataFromUrl(req, res, next) {
     const url = req.body.postUrl
-    try {
-        const response = await axios.get('http://localhost:5000/get-metadata', {
-        params: { url }
-        });
-        req.body.metadata = response.data.title || '';
-        next()
-    } catch (error) {
-        console.error('Erro ao buscar a página:', error);
-        return false;
+    if (!url) {
+        return res.status(400).json({ error: 'URL not provided' });
     }
-}
 
-export async function getTitleFromUrl(req, res, next) {
-    const url = req.body.postUrl
     try {
-        const response = await axios.get(url);
-        const $ = cheerio.load(response.data);
-        const pageTitle = $('title').text();
-        req.body.pageTitle = pageTitle
+        const metadata = await urlMetadata(url);
+        req.body.metadata = metadata
+        console.log("Achou o metadata")
         next()
     } catch (error) {
-        console.error('Erro ao buscar a página:', error);
-        return false;
+        res.status(500).json({ error: 'An error occurred while fetching metadata' });
     }
 }

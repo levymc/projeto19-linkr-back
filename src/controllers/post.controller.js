@@ -15,10 +15,17 @@ const timezoneName = 'America/Sao_Paulo';
 export async function newPost(req, res){
     req.body.userId = 1
     const timestampAtual = Date.now();
-    console.log(req.body);
+    console.log(req.body.metadata['og:image']);
     try{
-        // const insertedPost = await postRepo.createPost(res.locals.userId, req.body.content, req.body.postUrl)
-        // if (insertedPost) return res.status(201).send(insertedPost)
+        const insertedPost = await postRepo.createPost(
+                                                        res.locals.userId, 
+                                                        req.body.content, 
+                                                        req.body.postUrl,
+                                                        req.body.metadata['og:image'],
+                                                        req.body.metadata['og:title'],
+                                                        req.body.metadata['og:description']
+                                                    )
+        if (insertedPost) return res.status(201).send(insertedPost)
     }catch(err){
         console.error("Erro na criação de Post: ",err)
         res.status(500).send("Erro na criação de Post: " + err)
@@ -51,15 +58,16 @@ export async function editPosts (req, res) {
     }
 }
 
-export async function getMetadata (req, res){
-    const url = req.query.url;
+export async function getMetadata (req, res, next){
+    const url = req.body.postUrl;
     if (!url) {
         return res.status(400).json({ error: 'URL not provided' });
     }
 
     try {
         const metadata = await urlMetadata(url);
-        res.json(metadata);
+        req.body.metadata = metadata
+        next()
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching metadata' });
     }
