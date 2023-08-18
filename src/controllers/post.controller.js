@@ -41,10 +41,23 @@ export async function getPosts (req, res) {
 
 export async function editPosts (req, res) {
     const {text, hashtags, postId} = req.body
+    const editedAt = dayjs().format('YYYY-MM-DD HH:mm:ssZ');
+    console.log(editedAt);
     try{
-        console.log(req.body)
-        const updatePost = await postRepo.atualizarPost(postId, text, postId)
+        const updatePost = await postRepo.atualizarPost(postId, text, hashtags, editedAt)
         if(updatePost) return res.sendStatus(200)
+    }catch(err){
+        res.status(500).send(err)
+    }
+}
+
+export async function deletePost(req, res){
+    const {id} = req.params
+    try{
+        const post = await postRepo.sendPost(id);
+        if(!post) return res.sendStatus(404);
+        const delPost = await postRepo.deletarPost(id)
+        if(delPost) return res.sendStatus(200)
     }catch(err){
         res.status(500).send(err)
     }
