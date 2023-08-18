@@ -3,6 +3,7 @@ import { getUserById } from "../repositories/auth.repository.js"
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
+import urlMetadata from "url-metadata"
 
 const postRepo = new PostRepository()
 
@@ -47,5 +48,19 @@ export async function editPosts (req, res) {
         if(updatePost) return res.sendStatus(200)
     }catch(err){
         res.status(500).send(err)
+    }
+}
+
+export async function getMetadata (req, res){
+    const url = req.query.url;
+    if (!url) {
+        return res.status(400).json({ error: 'URL not provided' });
+    }
+
+    try {
+        const metadata = await urlMetadata(url);
+        res.json(metadata);
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while fetching metadata' });
     }
 }
