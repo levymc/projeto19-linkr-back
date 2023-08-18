@@ -2,13 +2,14 @@ import { db } from "../database/db.connection.js";
 
 export default class PostRepository {
 
-    async createPost(userId, content, postUrl, timestamp) {
+    async createPost(userId, content, postUrl, imgMetadata, titleMetadata, descriptionMetadata) {
+        console.log(userId, content, postUrl, imgMetadata, titleMetadata, descriptionMetadata)
         const query = `
-            INSERT INTO public.posts ("userId", content, "postUrl")
-            VALUES ($1, $2, $3)
+            INSERT INTO public.posts ("userId", content, "postUrl", "imgMetadata", "titleMetadata", "descriptionMetadata")
+            VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *;
         `;
-        const values = [userId, content, postUrl]
+        const values = [userId, content, postUrl, imgMetadata, titleMetadata, descriptionMetadata]
 
         try {
             const result = await db.query(query, values)
@@ -21,8 +22,9 @@ export default class PostRepository {
 
     async getPosts() { // limitado a 20 posts
         const query = `
-            SELECT * FROM public.posts
-            ORDER BY "createdAt" desc LIMIT 20
+            SELECT post.*, "user".email, "user".name, "user"."imageUrl" FROM public.posts as post
+            LEFT JOIN public.users as "user" on (post."userId" = "user"."userId")
+            ORDER BY post."createdAt" desc LIMIT 20
         `
         try {
             const result = await db.query(query);

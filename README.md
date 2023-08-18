@@ -40,5 +40,5 @@ Authenticate an existing user.
 
 Log out a user by invalidating their session.
 
-- **URL**: `DELETE /logout`
+- **URL**: `POST /logout`
 - **Headers**: `Authorization: Bearer <token>`
