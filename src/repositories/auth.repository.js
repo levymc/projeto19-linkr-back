@@ -61,15 +61,17 @@ export function findSessionDB(token) {
   return db.query(`SELECT "userId" FROM sessions WHERE token = $1;`, [token]);
 }
 
-export async function updateSessionActivity(token) {
+export async function updateSessionTokenAndActivity(oldToken, newToken) {
   try {
     await db.query(
-      'UPDATE "sessions" SET "createdAt" = NOW() WHERE "token" = $1',
-      [token]
+      'UPDATE "sessions" SET "token" = $1, "createdAt" = NOW() WHERE "token" = $2',
+      [newToken, oldToken]
     );
   } catch (error) {
-    console.error("Error updating session activity:", error);
-    throw new Error("An error occurred while updating session activity.");
+    console.error("Error updating session token and activity:", error);
+    throw new Error(
+      "An error occurred while updating session token and activity."
+    );
   }
 }
 
