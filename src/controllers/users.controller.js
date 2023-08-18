@@ -15,6 +15,6 @@ export async function searchByUsername(req, res) {
     res.json({ users });
   } catch (error) {
     console.error("Error during letter search:", error);
-    res.status(500).json({ error: "An error occurred during letter search." });
+    res.status(500).send({ message: "Error during letter search:", error });
   }
 }

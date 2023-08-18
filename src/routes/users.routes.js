@@ -4,6 +4,6 @@ import { searchByUsername } from "../controllers/users.controller.js";
 
 const usersRouter = Router();
 
-usersRouter.get("/users/:userName", searchByUsername);
+usersRouter.get("/users/:userName", validateAuth, searchByUsername);
 
 export default usersRouter;
