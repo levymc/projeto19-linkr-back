@@ -42,7 +42,6 @@ export async function getPosts (req, res) {
 export async function editPosts (req, res) {
     const {text, hashtags, postId} = req.body
     const editedAt = dayjs().format('YYYY-MM-DD HH:mm:ssZ');
-    console.log(editedAt);
     try{
         const updatePost = await postRepo.atualizarPost(postId, text, hashtags, editedAt)
         if(updatePost) return res.sendStatus(200)
