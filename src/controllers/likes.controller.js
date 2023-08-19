@@ -3,16 +3,17 @@ import {
   insertLike,
   verifyLike,
 } from "../repositories/likes.repository.js";
+import { getUserById } from "../repositories/auth.repository.js"
 
 export async function likePost(req, res) {
   const { userId, postId } = req.body;
   const createdAt = new Date();
 
-  // const user = await ---funçao que pega o usuário pelo token
+  const user = await getUserById(res.locals.userId)
 
   try {
-    // if (!user)
-    //   return res.status(401).json({ message: "Usuário não autenticado." });
+    if (!user)
+      return res.status(401).json({ message: "Usuário não autenticado." });
 
     const existingLike = await verifyLike(userId, postId);
 
@@ -28,5 +29,14 @@ export async function likePost(req, res) {
     }
   } catch (err) {
     res.status(500).json({ message: "Erro ao interagir com o Like." });
+  }
+}
+
+export async function countLikes(req, res) {
+
+  try {
+
+  }catch (err) {
+    
   }
 }
