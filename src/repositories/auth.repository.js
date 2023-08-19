@@ -17,8 +17,6 @@ export async function createUser(email, password, name, imageUrl) {
   }
 }
 
-
-
 export async function getUserByEmail(email) {
   try {
     const result = await db.query(
@@ -47,7 +45,7 @@ export async function getActiveSession(userId) {
 export async function createSessionWithToken(userId, token) {
   try {
     const result = await db.query(
-      'INSERT INTO "sessions" ("userId", "token", "createdAt") VALUES ($1, $2, NOW()) RETURNING *',
+      'INSERT INTO "sessions" ("userId", token, "createdAt") VALUES ($1, $2, NOW()) RETURNING *',
       [userId, token]
     );
     return result.rows[0];
