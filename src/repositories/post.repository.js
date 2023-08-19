@@ -54,11 +54,11 @@ export default class PostRepository {
     async atualizarPost(postId, content, hashtags, editedAt) {
         const query = `
             UPDATE public.posts
-            SET content = $2, "hashtags" = $3, "editedAt" = $4
+            SET content = $2, "hashtags" = $3
             WHERE "postId" = $1
             RETURNING *
         `
-        const values = [postId, content, hashtags, editedAt]
+        const values = [postId, content, hashtags]
 
         try {
             const result = await db.query(query, values)
