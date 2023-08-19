@@ -13,6 +13,8 @@ import usersRouter from "./users.routes.js";
 import { validateAuth } from "../middlewares/validateAuth.js";
 import { getMetadataFromUrl } from "../middlewares/getMetadatas.js";
 
+import { likePost , countLike } from "../controllers/likes.controller.js";
+
 const router = Router();
 
 router.post("/newPost", validateAuth, getMetadataFromUrl, newPost);
@@ -20,8 +22,11 @@ router.get("/posts", getPosts);
 router.put("/posts", validateSchema(postSchema), editPosts);
 router.delete('/posts/:id', deletePost)
 
+
+router.post("/like", likePost);
+router.get("/like/:postId", countLike)
+
 router.use(authRouter);
 router.use(usersRouter);
 
 export default router;
-

@@ -19,4 +19,3 @@ app.listen(PORT, () => {
     console.log(`Running Linkr API on port ${PORT}`)
     //startActivityMonitoring()
 })
-
