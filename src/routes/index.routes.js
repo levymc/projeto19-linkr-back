@@ -4,6 +4,7 @@ import {
   getPosts,
   editPosts,
   deletePost,
+  getUserPosts,
 } from "../controllers/post.controller.js";
 
 import authRouter from "./auth.routes.js";
@@ -21,6 +22,7 @@ router.post("/newPost", validateAuth, getMetadataFromUrl, newPost);
 router.get("/posts", getPosts);
 router.put("/posts", validateSchema(postSchema), editPosts);
 router.delete('/posts/:id', deletePost)
+router.get("/userPosts/:id", getUserPosts)
 
 
 router.post("/like", likePost);
