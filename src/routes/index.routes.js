@@ -3,6 +3,7 @@ import {
   newPost,
   getPosts,
   editPosts,
+  deletePost,
 } from "../controllers/post.controller.js";
 
 import authRouter from "./auth.routes.js";
@@ -17,8 +18,10 @@ const router = Router();
 router.post("/newPost", validateAuth, getMetadataFromUrl, newPost);
 router.get("/posts", getPosts);
 router.put("/posts", validateSchema(postSchema), editPosts);
+router.delete('/posts/:id', deletePost)
 
 router.use(authRouter);
 router.use(usersRouter);
 
 export default router;
+
