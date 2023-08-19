@@ -25,7 +25,6 @@ export async function signUp(req, res) {
 }
 export async function signIn(req, res) {
   const { email, password } = req.body;
-  console.log("AQYU")
 
   try {
     const user = await userRepo.getUserByEmail(email);
@@ -49,17 +48,11 @@ export async function signIn(req, res) {
     } else {
       session = await userRepo.createSessionWithToken(user.userId, token);
     }
-
-    const createdToken = jwt.sign({ userId: user.userId }, String(process.env.SECRET_KEY));
-    console.log(token)
-    const sessionCreated = await userRepo.createSessionWithToken(user.userId, createdToken);
-
-    res.send({ id: user.userId, createdToken, imageUrl: user.imageUrl });
+    res.send({ id: user.userId, token, imageUrl: user.imageUrl });
   } catch (err) {
     res.status(500).send(err.message);
   }
 }
-
 export async function logout(req, res) {
   const authHeader = req.headers.authorization;
   const token = authHeader.split(" ")[1];
