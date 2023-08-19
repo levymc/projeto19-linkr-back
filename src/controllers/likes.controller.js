@@ -1,42 +1,48 @@
 import {
+  countLikes,
+  countLikesTooltip,
   deleteLike,
   insertLike,
   verifyLike,
 } from "../repositories/likes.repository.js";
-import { getUserById } from "../repositories/auth.repository.js"
 
 export async function likePost(req, res) {
   const { userId, postId } = req.body;
   const createdAt = new Date();
 
-  const user = await getUserById(res.locals.userId)
-
   try {
-    if (!user)
-      return res.status(401).json({ message: "Usuário não autenticado." });
-
     const existingLike = await verifyLike(userId, postId);
 
-    console.log(existingLike.rowCount)
-
-    if (existingLike.rowCount !==0) {console.log("back")
+    if (existingLike.rowCount !== 0) {
       await deleteLike(userId, postId);
+      await countLikes(postId);
+
       res.status(200).json({ message: "Like removido com sucesso." });
     } else {
       await insertLike(userId, postId, createdAt);
-      
+      const updatedLikeCount = await countLikes(postId);
+
       res.status(200).json({ message: "Like inserido com sucesso." });
     }
   } catch (err) {
+    console.error("Erro ao interagir com o Like:", err);
     res.status(500).json({ message: "Erro ao interagir com o Like." });
   }
 }
 
-export async function countLikes(req, res) {
-
+export async function countLike(req, res) {
   try {
+    const postId = req.params.postId;
+    const likeCount = await countLikes(postId);
+    const count = likeCount.rows[0].count;
 
-  }catch (err) {
-    
+    const likedUsers = await countLikesTooltip(postId);
+    const users =
+      likedUsers.rows.map((user) => user.name).join(", ") + " liked.";
+
+    res.status(200).json({ count, users });
+  } catch (err) {
+    console.error("Erro ao contar as curtidas:", err);
+    res.status(500).json({ error: "Erro ao contar as curtidas" });
   }
 }

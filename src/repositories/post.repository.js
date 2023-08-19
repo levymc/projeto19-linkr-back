@@ -51,14 +51,14 @@ export default class PostRepository {
         }
     }
 
-    async atualizarPost(postId, content, postUrl, createdAt) {
+    async atualizarPost(postId, content, hashtags, editedAt) {
         const query = `
             UPDATE public.posts
-            SET content = $2, "postUrl" = $3, "createdAt" = $4
+            SET content = $2, "hashtags" = $3
             WHERE "postId" = $1
             RETURNING *
         `
-        const values = [postId, content, postUrl, createdAt]
+        const values = [postId, content, hashtags]
 
         try {
             const result = await db.query(query, values)
@@ -74,6 +74,22 @@ export default class PostRepository {
             DELETE FROM public.posts
             WHERE "postId" = $1
             RETURNING *
+        `;
+        const values = [postId]
+
+        try {
+            const result = await db.query(query, values)
+            return result.rows[0]
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
+
+    async sendPost(postId) {
+        const query = `
+            SELECT * FROM public.posts
+            WHERE "postId" = $1
         `;
         const values = [postId]
 

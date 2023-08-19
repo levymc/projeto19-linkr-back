@@ -14,13 +14,26 @@ export function deleteLike(userId, postId) {
   ]);
 }
 
-export function countLikes() {
-  return db.query(`
-    SELECT "postId", COUNT(*) AS "numLikes"
-    FROM likes
-    GROUP BY "postId"`);
+export function countLikes(postId) {
+  return db.query(
+    `
+  SELECT COUNT(*) FROM likes WHERE "postId"= $1`,
+    [postId]
+  );
+}
+
+export function countLikesTooltip(postId) {
+  return db.query(
+    `
+    SELECT * FROM (SELECT * FROM likes JOIN users ON likes."userId" = users."userId") whoLiked WHERE "postId"= $1`,
+    [postId]
+  );
 }
 
 export function verifyLike(userId, postId) {
-  return db.query(`SELECT * FROM likes WHERE "userId" = $1  AND "postId" = $2`, [userId, postId]);
+
+  return db.query(
+    `SELECT * FROM likes WHERE "userId" = $1  AND "postId" = $2`,
+    [userId, postId]
+  );
 }
