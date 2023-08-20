@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
 import urlMetadata from "url-metadata"
-import { updateHashtagsOnEdit, updateHashtagsOnPost } from "../repositories/hashtag.repository.js"
+import { updateHashtagsOnDelete, updateHashtagsOnEdit, updateHashtagsOnPost } from "../repositories/hashtag.repository.js"
 
 const postRepo = new PostRepository()
 
@@ -96,6 +96,11 @@ export async function editPosts(req, res) {
 export async function deletePost(req, res) {
     const { id } = req.params
     try {
+
+        // hashtag stuff
+        await updateHashtagsOnDelete(id);
+        // end of hashtag stuff
+
         const post = await postRepo.sendPost(id);
         if (!post) return res.sendStatus(404);
         const delPost = await postRepo.deletarPost(id)
