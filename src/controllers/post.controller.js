@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
 import urlMetadata from "url-metadata"
+import { updateHashtagsOnPost } from "../repositories/hashtag.repository.js"
 
 const postRepo = new PostRepository()
 
@@ -25,6 +26,16 @@ export async function newPost(req, res) {
             req.body.metadata['og:title'],
             req.body.metadata['og:description']
         )
+
+        // hashtag stuff
+        let hashtags = [];
+        insertedPost.content.split(/\s+/).map((word) => {
+            if (word.startsWith('#')) { hashtags.push(word.substring(1)) };
+        })
+        hashtags = [...new Set(hashtags)];
+        await updateHashtagsOnPost(insertedPost.postId, hashtags);
+        // end of hashtag stuff
+
         if (insertedPost) return res.status(201).send(insertedPost)
     } catch (err) {
         console.error("Erro na criação de Post: ", err)

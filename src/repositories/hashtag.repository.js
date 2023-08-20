@@ -27,27 +27,27 @@ export async function getHashtagRepository(hashtag) {
 
 }
 
-export async function updateHashtagsRepository(postId, ...hashtags) {
+export async function updateHashtagsOnPost(postId, hashtags) {
 
     try {
 
-        let queryValues;
-        hashtags.forEach(async (hashtag) => { queryValues += `('${hashtag}'), ` });
-        queryValues = queryValues.substring(0, str.length - 2);
+        let queryValues = '';
+        hashtags.forEach((hashtag) => { queryValues += `('${hashtag}'), ` });
+        queryValues = queryValues.substring(0, queryValues.length - 2);
 
         const dbResponse = await db.query(`
-            INSERT INTO "hashtag" ("hashtagName")
+            INSERT INTO "hashtags" ("hashtagName")
                 VALUES ${queryValues}
             ON CONFLICT ("hashtagName") DO UPDATE
-                SET "currentInteractions" = "currentInteractions" + 1
+                SET "currentInteractions" = "hashtags"."currentInteractions" + 1
             RETURNING "hashtagId", "hashtagName";
         `)
 
-        const hashtagIdArray = dbResponse.rows.map((e) => { e.hashtagId });
+        const hashtagIdArray = dbResponse.rows.map(e => e.hashtagId);
 
-        let queryJunctionValues;
-        hashtagIdArray.forEach(async (hashtagId) => { queryJunctionValues += `('${hashtagId}', '${postId}'), ` });
-        queryJunctionValues = queryValues.substring(0, str.length - 2);
+        let queryJunctionValues = '';
+        hashtagIdArray.forEach((hashtagId) => { queryJunctionValues += `('${hashtagId}', '${postId}'), ` });
+        queryJunctionValues = queryJunctionValues.substring(0, queryJunctionValues.length - 2);
 
         await db.query(`
             INSERT
@@ -55,7 +55,6 @@ export async function updateHashtagsRepository(postId, ...hashtags) {
                 VALUES ${queryJunctionValues};
         `);
 
-        console.log(dbResponse.rows);
         return dbResponse.rows;
 
     } catch (error) {
