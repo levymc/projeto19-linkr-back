@@ -17,8 +17,6 @@ export async function createUser(email, password, name, imageUrl) {
   }
 }
 
-
-
 export async function getUserByEmail(email) {
   try {
     const result = await db.query(
@@ -47,7 +45,7 @@ export async function getActiveSession(userId) {
 export async function createSessionWithToken(userId, token) {
   try {
     const result = await db.query(
-      'INSERT INTO "sessions" ("userId", "token", "createdAt") VALUES ($1, $2, NOW()) RETURNING *',
+      'INSERT INTO "sessions" ("userId", token, "createdAt") VALUES ($1, $2, NOW()) RETURNING *',
       [userId, token]
     );
     return result.rows[0];
@@ -64,7 +62,7 @@ export function findSessionDB(token) {
 export async function updateSessionTokenAndActivity(oldToken, newToken) {
   try {
     await db.query(
-      'UPDATE "sessions" SET "token" = $1, "createdAt" = NOW() WHERE "token" = $2',
+      'UPDATE "sessions" SET token = $1, "createdAt" = NOW() WHERE token = $2',
       [newToken, oldToken]
     );
   } catch (error) {
