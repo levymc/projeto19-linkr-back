@@ -62,7 +62,7 @@ export function findSessionDB(token) {
 export async function updateSessionTokenAndActivity(oldToken, newToken) {
   try {
     await db.query(
-      'UPDATE "sessions" SET "token" = $1, "createdAt" = NOW() WHERE "token" = $2',
+      'UPDATE "sessions" SET token = $1, "createdAt" = NOW() WHERE token = $2',
       [newToken, oldToken]
     );
   } catch (error) {
