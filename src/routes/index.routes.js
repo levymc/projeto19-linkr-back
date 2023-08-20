@@ -13,7 +13,7 @@ import { postSchema } from "../schemas/postSchemas.js";
 import usersRouter from "./users.routes.js";
 import { validateAuth } from "../middlewares/validateAuth.js";
 import { getMetadataFromUrl } from "../middlewares/getMetadatas.js";
-
+import hashtagRouter from "./hashtag.routes.js";
 import { likePost , countLike } from "../controllers/likes.controller.js";
 
 const router = Router();
@@ -30,5 +30,7 @@ router.get("/like/:postId", countLike)
 
 router.use(authRouter);
 router.use(usersRouter);
+
+router.use(hashtagRouter);
 
 export default router;
