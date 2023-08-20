@@ -5,18 +5,19 @@ export async function getHashtagRepository(hashtag) {
     try {
 
         const dbResponse = await db.query(`
-            SELECT *
+            SELECT "posts".*, "users"."userId", "users"."name", "users"."imageUrl"
             FROM "hashtags"
             JOIN "hashtagPostJunction"
                 USING ("hashtagId")
             JOIN "posts"
                 USING ("postId")
+            JOIN "users"
+                USING ("userId")
             WHERE "hashtagName" = '${hashtag}'
             ORDER BY "createdAt" DESC
             LIMIT 20
         `);
 
-        console.log(dbResponse.rows);
         return dbResponse.rows;
 
     } catch (error) {
