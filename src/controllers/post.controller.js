@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
 import urlMetadata from "url-metadata"
-import { updateHashtagsOnPost } from "../repositories/hashtag.repository.js"
+import { updateHashtagsOnEdit, updateHashtagsOnPost } from "../repositories/hashtag.repository.js"
 
 const postRepo = new PostRepository()
 
@@ -76,9 +76,20 @@ export async function editPosts(req, res) {
     const editedAt = dayjs().format('YYYY-MM-DD HH:mm:ssZ');
     try {
         const updatePost = await postRepo.atualizarPost(postId, text, hashtags, editedAt)
+
+        // hashtag stuff
+        let extractedHashtags = [];
+        updatePost.content.split(/\s+/).map((word) => {
+            if (word.startsWith('#')) { extractedHashtags.push(word.substring(1)) };
+        })
+        extractedHashtags = [...new Set(extractedHashtags)];
+        await updateHashtagsOnEdit(updatePost.postId, extractedHashtags);
+        // end of hashtag stuff
+
         if (updatePost) return res.sendStatus(200)
     } catch (err) {
         res.status(500).send(err)
+        console.log(err)
     }
 }
 
