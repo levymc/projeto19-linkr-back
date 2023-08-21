@@ -165,3 +165,41 @@ export async function updateHashtagsOnDelete(postId) {
     }
 
 }
+
+export async function getAllHashtags() {
+
+    try {
+
+        const dbResponse = await db.query(`
+            SELECT *
+                FROM "hashtags"
+        `);
+
+        return dbResponse.rows
+
+    } catch (error) {
+
+        throw new Error(error.message);
+
+    }
+
+}
+
+export async function dailyHashtagReset() {
+
+    try {
+
+        await db.query(`
+            UPDATE "hashtags"
+                SET
+                    "dailyInteractionsArray" = array_append("hashtags"."dailyInteractionsArray", "hashtags"."currentInteractions"),
+                    "currentInteractions" = 0
+        `);
+
+    } catch (error) {
+
+        throw new Error(error.message);
+
+    }
+
+}
