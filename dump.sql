@@ -32,6 +32,9 @@ CREATE TABLE posts (
         FOREIGN KEY ("userId") REFERENCES "users"("userId"),
     "content" TEXT NOT NULL,
     "postUrl" TEXT NOT NULL,
+    "imgMetadata" TEXT NOT NULL,
+    "titleMetadata" TEXT NOT NULL,
+    "descriptionMetadata" TEXT,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
