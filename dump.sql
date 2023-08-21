@@ -16,9 +16,6 @@ CREATE TABLE sessions (
     "userId" INTEGER NOT NULL,
         FOREIGN KEY ("userId") REFERENCES "users"("userId"),
     "token" TEXT NOT NULL,
-    "imgMetadata" TEXT,
-    "titleMetadata" TEXT,
-    "descriptionMetadata" TEXT,
     "editedAt" TIMESTAMP WITHOUT TIME ZONE,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
@@ -32,6 +29,9 @@ CREATE TABLE posts (
         FOREIGN KEY ("userId") REFERENCES "users"("userId"),
     "content" TEXT NOT NULL,
     "postUrl" TEXT NOT NULL,
+    "imgMetadata" TEXT,
+    "titleMetadata" TEXT,
+    "descriptionMetadata" TEXT,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
