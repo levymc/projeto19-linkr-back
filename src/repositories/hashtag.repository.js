@@ -29,7 +29,9 @@ export async function getHashtagRepository(hashtag) {
 }
 
 export async function updateHashtagsOnPost(postId, hashtags) {
-
+    if (hashtags.length === 0) {
+        return [];
+    }
     try {
 
         let queryValues = '';
