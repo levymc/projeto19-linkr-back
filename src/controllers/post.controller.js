@@ -46,7 +46,7 @@ export async function newPost(req, res) {
 export async function getPosts(req, res) {
     try {
       const { limit } = req.query; 
-      const posts = await postRepo.getPosts(limit); // Passa o limit para o método do repositório
+      const posts = await postRepo.getPosts(limit)
       const response = {
         posts: posts,
       };
