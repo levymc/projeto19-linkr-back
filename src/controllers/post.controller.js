@@ -45,18 +45,17 @@ export async function newPost(req, res) {
 
 export async function getPosts(req, res) {
     try {
-        const posts = await postRepo.getPosts()
-        // const user = await getUserById(res.locals.userId)
-        const response = {
-            posts: posts,
-            // user: user
-        }
-        if (posts) return res.status(200).send(response)
+      const { limit } = req.query; 
+      const posts = await postRepo.getPosts(limit); // Passa o limit para o método do repositório
+      const response = {
+        posts: posts,
+      };
+      if (posts) return res.status(200).send(response);
     } catch (err) {
-        console.error("Erro no getPosts: ", err)
-        res.status(500).send("Erro no getPosts: " + err)
+      console.error("Erro no getPosts: ", err);
+      res.status(500).send("Erro no getPosts: " + err);
     }
-}
+  }
 
 export async function getUserPosts(req, res) {
     try {

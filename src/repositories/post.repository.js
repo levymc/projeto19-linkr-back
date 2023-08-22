@@ -20,20 +20,21 @@ export default class PostRepository {
         }
     }
 
-    async getPosts() { // limitado a 20 posts
+    async getPosts(limit = 20) {
         const query = `
             SELECT post.*, "user".email, "user".name, "user"."imageUrl" FROM public.posts as post
             LEFT JOIN public.users as "user" on (post."userId" = "user"."userId")
-            ORDER BY post."createdAt" desc LIMIT 20
-        `
+            ORDER BY post."createdAt" desc LIMIT ${limit}
+        `;
         try {
             const result = await db.query(query);
-            return result.rows
+            return result.rows;
         } catch (error) {
-            console.error(error)
-            return false
+            console.error(error);
+            return false;
         }
-    }
+      }
+      
 
     async getUserPosts(id) { // limitado a 20 posts
         const query = `
