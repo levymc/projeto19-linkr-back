@@ -133,10 +133,7 @@ export async function numberComments(req, res) {
     const { postId } = req.params;
     try {
        const number = await postRepo.getNumberComments(postId);
-      if (number){
-        const count = number.commentCount
-        return res.send(number);
-      }
+      if (number) return res.send(number);
     } catch (err) {
       res.status(500).send(err);
     }
