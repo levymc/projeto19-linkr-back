@@ -7,6 +7,16 @@ CREATE TABLE users (
     "createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
+
+CREATE TABLE follows (
+  "followerId" INTEGER NOT NULL,
+    FOREIGN KEY ("followerId") REFERENCES "users"("userId"),
+  "followingId" INTEGER NOT NULL,
+    FOREIGN KEY ("followingId") REFERENCES "users"("userId"),
+  PRIMARY KEY ("followerId", "followingId")
+);
+
+
 CREATE INDEX users_login_index
     ON "users" ("email")
     INCLUDE ("password");
@@ -72,3 +82,4 @@ CREATE TABLE "hashtagPostJunction" (
 
 CREATE INDEX hashtagpostjunction_pk_reverse_order_index
     ON "hashtagPostJunction" ("postId", "hashtagId");
+
