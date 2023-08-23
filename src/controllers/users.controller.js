@@ -48,3 +48,15 @@ export async function toggleFollow(req, res) {
     res.status(500).send({ message: "Error toggling follow status:", error });
   }
 }
+
+export async function checkFollow(req, res) {
+  const { userId } = req.params;
+  const loggedInUserId = req.query.loggedInUserId;
+
+  const isFollowing = await userRepo.checkIfUserIsFollowing(
+    userId,
+    loggedInUserId
+  );
+
+  res.json(isFollowing);
+}
