@@ -156,4 +156,21 @@ export default class PostRepository {
       return false;
     }
   }
+
+  async getNumberComments(postId) {
+        const query = `
+          SELECT COUNT(*) AS commentCount
+          FROM public.comments
+          WHERE "postId" = $1;
+        `;
+    const values = [postId];
+
+    try {
+      const result = await db.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 }
