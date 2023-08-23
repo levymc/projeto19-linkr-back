@@ -41,3 +41,11 @@ export async function getFollowingIds(userId) {
   );
   return result.rows.map((row) => row.followingId);
 }
+
+export async function checkIfUserIsFollowing(userIdToFollow, loggedInUserId) {
+  const result = await db.query(
+    'SELECT 1 FROM "follows" WHERE "followerId" = $1 AND "followingId" = $2',
+    [loggedInUserId, userIdToFollow]
+  );
+  return result.rows.length > 0;
+}
