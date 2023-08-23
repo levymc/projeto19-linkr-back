@@ -3,11 +3,11 @@ import { db } from "../database/db.connection.js";
 export default class PostRepository {
   async getFollowingPosts(followingIds) {
     const query = `
-          SELECT post.*, "user".email, "user".name, "user"."imageUrl" FROM public.posts as post
-          LEFT JOIN public.users as "user" on (post."userId" = "user"."userId")
-          WHERE post."userId" = ANY($1)
-          ORDER BY post."createdAt" DESC LIMIT 20;
-        `;
+      SELECT post.*, "user".email, "user".name, "user"."imageUrl" FROM public.posts as post
+      LEFT JOIN public.users as "user" on (post."userId" = "user"."userId")
+      WHERE post."userId" = ANY($1)
+      ORDER BY post."createdAt" DESC LIMIT 20;
+    `;
 
     try {
       const result = await db.query(query, [followingIds]);

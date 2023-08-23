@@ -63,8 +63,8 @@ export async function getFollowingPosts(req, res) {
 
 export async function getPosts(req, res) {
   try {
-    const posts = await postRepo.getPosts();
-
+    const { limit } = req.query;
+    const posts = await postRepo.getPosts(limit);
     const response = {
       posts: posts,
     };
