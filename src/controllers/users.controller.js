@@ -60,3 +60,15 @@ export async function checkFollow(req, res) {
 
   res.json(isFollowing);
 }
+
+export async function getFollowingIds(req, res) {
+  const loggedInUserId = req.params.userId;
+
+  try {
+    const followingIds = await userRepo.getFollowingIds(loggedInUserId);
+    res.json({ followingIds });
+  } catch (error) {
+    console.error("Error getting following IDs:", error);
+    res.status(500).send({ message: "Error getting following IDs:", error });
+  }
+}

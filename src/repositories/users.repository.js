@@ -34,10 +34,10 @@ export async function toggleFollowStatus(userIdToFollow, loggedInUserId) {
   }
 }
 
-export async function checkIfUserIsFollowing(userIdToFollow, loggedInUserId) {
+export async function getFollowingIds(userId) {
   const result = await db.query(
-    'SELECT 1 FROM "follows" WHERE "followerId" = $1 AND "followingId" = $2',
-    [loggedInUserId, userIdToFollow]
+    'SELECT "followingId" FROM "follows" WHERE "followerId" = $1',
+    [userId]
   );
-  return result.rows.length > 0;
+  return result.rows.map((row) => row.followingId);
 }
