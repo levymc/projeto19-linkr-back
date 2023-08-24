@@ -198,7 +198,7 @@ export default class PostRepository {
 
   async infoComments(postId) {
     const query = `
-      SELECT u.name, u."imageUrl", c.comment
+      SELECT u."userId", u.name, u."imageUrl", c.comment
       FROM users u
       JOIN comments c ON u."userId" = c."userId"
       WHERE c."postId" = $1; 
