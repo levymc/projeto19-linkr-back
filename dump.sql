@@ -16,6 +16,17 @@ CREATE TABLE follows (
   PRIMARY KEY ("followerId", "followingId")
 );
 
+CREATE TABLE "comments" (
+    "commentId" serial NOT NULL,
+    "userId" integer NOT NULL,
+    "postId" integer NOT NULL,
+    "comment" TEXT NOT NULL,
+    "createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
+    PRIMARY KEY ("commentId"),
+    CONSTRAINT "comments_fk" FOREIGN KEY ("userId") REFERENCES "users"("userId"),
+    CONSTRAINT "comments_fk0" FOREIGN KEY ("postId") REFERENCES "posts"("postId")
+);
+
 
 CREATE INDEX users_login_index
     ON "users" ("email")
@@ -40,6 +51,7 @@ CREATE TABLE posts (
     "content" TEXT NOT NULL,
     "postUrl" TEXT NOT NULL,
     "imgMetadata" TEXT,
+    "hashtags" TEXT,
     "titleMetadata" TEXT,
     "descriptionMetadata" TEXT,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
