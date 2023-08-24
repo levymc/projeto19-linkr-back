@@ -10,6 +10,8 @@ import {
   getUserPosts,
   getFollowingPosts,
   numberComments,
+  postComments,
+  getComments,
 } from "../controllers/post.controller.js";
 
 import { Router } from "express";
@@ -23,6 +25,8 @@ postRouter.put("/posts", validateSchema(postSchema), editPosts);
 postRouter.delete("/posts/:id", deletePost);
 postRouter.get("/userPosts/:id", getUserPosts);
 postRouter.get("/numberComments/:postId", numberComments);
+postRouter.post("/comments", postComments);
+postRouter.get("/comments/:postId", getComments);
 
 
 export default postRouter;

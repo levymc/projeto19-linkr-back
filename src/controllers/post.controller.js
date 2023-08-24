@@ -137,4 +137,25 @@ export async function numberComments(req, res) {
     } catch (err) {
       res.status(500).send(err);
     }
+}
+
+export async function postComments(req, res) {
+  const { postId, userId, comment } = req.body;
+  try {
+      await postRepo.createComment(postId, userId, comment);
+     return res.sendStatus(201);
+  } catch (err) {
+    res.status(500).send(err);
   }
+
+}
+
+export async function getComments(req, res) {
+  const { postId } = req.params;
+  try {
+    const comments = await postRepo.infoComments(postId);
+    if(comments) return res.send(comments);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+}

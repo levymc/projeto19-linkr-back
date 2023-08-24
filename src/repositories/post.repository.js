@@ -126,9 +126,14 @@ export default class PostRepository {
 
   async deletarPost(postId) {
     const query = `
-            DELETE FROM public.posts
+          WITH deleted_comments AS (
+            DELETE FROM public.comments
             WHERE "postId" = $1
             RETURNING *
+        )
+        DELETE FROM public.posts
+        WHERE "postId" = $1
+        RETURNING *;
         `;
     const values = [postId];
 
@@ -158,7 +163,7 @@ export default class PostRepository {
   }
 
   async getNumberComments(postId) {
-        const query = `
+    const query = `
           SELECT COUNT(*) AS commentCount
           FROM public.comments
           WHERE "postId" = $1;
@@ -168,6 +173,41 @@ export default class PostRepository {
     try {
       const result = await db.query(query, values);
       return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
+  async createComment(postId, userId, comment) {
+    const query = `
+      INSERT INTO "comments" 
+      ("postId", "userId", "comment") 
+      VALUES ($1, $2, $3); 
+      `;
+    const values = [postId, userId, comment];
+
+    try {
+      const result = await db.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
+  async infoComments(postId) {
+    const query = `
+      SELECT u.name, u."imageUrl", c.comment
+      FROM users u
+      JOIN comments c ON u."userId" = c."userId"
+      WHERE c."postId" = $1; 
+      `;
+    const values = [postId];
+
+    try {
+      const result = await db.query(query, values);
+      return result.rows;
     } catch (error) {
       console.error(error);
       return false;
