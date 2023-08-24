@@ -10,7 +10,7 @@ import {
 const usersRouter = Router();
 
 usersRouter.get("/users/:userName", validateAuth, searchByUsername);
-usersRouter.post("/toggle-follow", validateAuth, toggleFollow);
+usersRouter.post("/follow", validateAuth, toggleFollow);
 usersRouter.get("/check-follow/:userId", validateAuth, checkFollow);
 usersRouter.get("/get-following/:userId", getFollowingIds);
 
