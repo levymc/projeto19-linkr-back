@@ -19,12 +19,12 @@ const timezoneName = "America/Sao_Paulo";
 export async function newPost(req, res) {
   req.body.userId = 1;
   const timestampAtual = Date.now();
-  console.log(req.body.metadata["og:image"]);
+  console.log(req.body.metadata);
   try {
     const insertedPost = await postRepo.createPost(
       res.locals.userId,
       req.body.content,
-      req.body.postUrl,
+      req.body.metadata.url,
       req.body.metadata["og:image"],
       req.body.metadata["og:title"],
       req.body.metadata["og:description"]
