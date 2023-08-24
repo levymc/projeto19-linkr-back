@@ -11,6 +11,7 @@ import {
   getFollowingPosts,
   numberComments,
   postComments,
+  getComments,
 } from "../controllers/post.controller.js";
 
 import { Router } from "express";
@@ -25,6 +26,7 @@ postRouter.delete("/posts/:id", deletePost);
 postRouter.get("/userPosts/:id", getUserPosts);
 postRouter.get("/numberComments/:postId", numberComments);
 postRouter.post("/comments", postComments);
+postRouter.get("/comments/:postId", getComments);
 
 
 export default postRouter;
