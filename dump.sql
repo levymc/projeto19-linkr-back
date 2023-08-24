@@ -51,6 +51,7 @@ CREATE TABLE posts (
     "content" TEXT NOT NULL,
     "postUrl" TEXT NOT NULL,
     "imgMetadata" TEXT,
+    "hashtags" TEXT,
     "titleMetadata" TEXT,
     "descriptionMetadata" TEXT,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
