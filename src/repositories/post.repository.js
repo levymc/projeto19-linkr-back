@@ -178,4 +178,21 @@ export default class PostRepository {
       return false;
     }
   }
+
+  async createComment(postId, userId, comment) {
+    const query = `
+      INSERT INTO "comments" 
+      ("postId", "userId", "comment") 
+      VALUES ($1, $2, $3); 
+      `;
+    const values = [postId, userId, comment];
+
+    try {
+      const result = await db.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 }
