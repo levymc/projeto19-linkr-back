@@ -126,9 +126,14 @@ export default class PostRepository {
 
   async deletarPost(postId) {
     const query = `
-            DELETE FROM public.posts
+          WITH deleted_comments AS (
+            DELETE FROM public.comments
             WHERE "postId" = $1
             RETURNING *
+        )
+        DELETE FROM public.posts
+        WHERE "postId" = $1
+        RETURNING *;
         `;
     const values = [postId];
 
@@ -158,7 +163,7 @@ export default class PostRepository {
   }
 
   async getNumberComments(postId) {
-        const query = `
+    const query = `
           SELECT COUNT(*) AS commentCount
           FROM public.comments
           WHERE "postId" = $1;
