@@ -147,4 +147,15 @@ export async function postComments(req, res) {
   } catch (err) {
     res.status(500).send(err);
   }
+
+}
+
+export async function getComments(req, res) {
+  const { postId } = req.params;
+  try {
+    const comments = await postRepo.infoComments(postId);
+    if(comments) return res.send(comments);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 }
