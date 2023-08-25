@@ -5,13 +5,14 @@ import {
   toggleFollow,
   checkFollow,
   getFollowingIds,
+  getFollowingPosts,
 } from "../controllers/users.controller.js";
 
 const usersRouter = Router();
 
 usersRouter.get("/users/:userName", validateAuth, searchByUsername);
 usersRouter.get("/check-follow/:userId", validateAuth, checkFollow);
-usersRouter.get("/get-following/:userId", getFollowingIds);
+usersRouter.get("/get-following/:userId", getFollowingPosts);
 usersRouter.post("/follow", validateAuth, toggleFollow);
 
 export default usersRouter;

@@ -130,31 +130,30 @@ export async function deletePost(req, res) {
 }
 
 export async function numberComments(req, res) {
-    const { postId } = req.params;
-    try {
-       const number = await postRepo.getNumberComments(postId);
-      if (number) return res.send(number);
-    } catch (err) {
-      res.status(500).send(err);
-    }
+  const { postId } = req.params;
+  try {
+    const number = await postRepo.getNumberComments(postId);
+    if (number) return res.send(number);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 }
 
 export async function postComments(req, res) {
   const { postId, userId, comment } = req.body;
   try {
-      await postRepo.createComment(postId, userId, comment);
-     return res.sendStatus(201);
+    await postRepo.createComment(postId, userId, comment);
+    return res.sendStatus(201);
   } catch (err) {
     res.status(500).send(err);
   }
-
 }
 
 export async function getComments(req, res) {
   const { postId } = req.params;
   try {
     const comments = await postRepo.infoComments(postId);
-    if(comments) return res.send(comments);
+    if (comments) return res.send(comments);
   } catch (err) {
     res.status(500).send(err);
   }
