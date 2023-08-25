@@ -536,3 +536,25 @@ ALTER TABLE ONLY public.sessions
 -- PostgreSQL database dump complete
 --
 
+
+
+-- Repost stuff --
+
+CREATE TABLE "reposts" (
+    "userId" INTEGER NOT NULL,
+        FOREIGN KEY ("userId") REFERENCES "users"("userId"),
+    "postId" INTEGER NOT NULL,
+        FOREIGN KEY ("postId") REFERENCES "posts"("postId"),
+    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY ("userId", "postId")
+);
+
+CREATE INDEX reposts_pk_reverse_order_index
+    ON "reposts" ("postId", "userId");
+
+CREATE INDEX reposts_pk_reverse_order_index
+    ON "reposts" ("postId", "userId");
+
+CREATE INDEX reposts_createdat_index
+    ON "reposts" ("createdAt");
