@@ -170,11 +170,17 @@ export default class PostRepository {
 
   async deletarPost(postId) {
     const query = `
-          WITH deleted_comments AS (
+        WITH
+          deleted_comments AS (
             DELETE FROM public.comments
             WHERE "postId" = $1
             RETURNING *
-        )
+          ),
+          deleted_reposts AS (
+            DELETE FROM "reposts"
+            WHERE "postId" = $1
+            RETURNING *
+          )
         DELETE FROM public.posts
         WHERE "postId" = $1
         RETURNING *;
