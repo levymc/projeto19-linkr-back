@@ -79,6 +79,8 @@ export async function getFollowingPosts(req, res) {
 
     const followingIds = await userRepo.getFollowingIds(loggedInUserId);
 
+    followingIds.push(loggedInUserId);
+
     const posts = await userRepo.getFollowingPosts(followingIds);
 
     const response = {
