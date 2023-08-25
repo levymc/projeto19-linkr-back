@@ -6,7 +6,7 @@ export default class PostRepository {
       SELECT post.*, "user".email, "user".name, "user"."imageUrl" FROM public.posts as post
       LEFT JOIN public.users as "user" on (post."userId" = "user"."userId")
       WHERE post."userId" = ANY($1)
-      ORDER BY post."createdAt" DESC;
+      ORDER BY post."createdAt" DESC LIMIT 20;
     `;
 
     try {
