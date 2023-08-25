@@ -30,7 +30,7 @@ export async function getTrending(req, res) {
                 hashtag['zScore'] = NaN;
             } else {
                 const hashtagScore = zScore(hashtag.currentInteractions, hashtag.dailyInteractionsArray);
-                if (isNaN(hashtagScore)) {
+                if (isNaN(hashtagScore) && typeof(hashtagScore) == 'number') {
                     hashtag['zScore'] = -99999999;
                 } else {
                     hashtag['zScore'] = hashtagScore;
