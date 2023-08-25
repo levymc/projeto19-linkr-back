@@ -27,9 +27,14 @@ export async function getTrending(req, res) {
 
         hashtags.forEach(hashtag => {
             if (hashtag.dailyInteractionsArray.length === 0) {
-                hashtag['zScore'] = Number.NEGATIVE_INFINITY;
+                hashtag['zScore'] = NaN;
             } else {
-                hashtag['zScore'] = zScore(hashtag.currentInteractions, hashtag.dailyInteractionsArray);
+                const hashtagScore = zScore(hashtag.currentInteractions, hashtag.dailyInteractionsArray);
+                if (isNaN(hashtagScore) && typeof(hashtagScore) == 'number') {
+                    hashtag['zScore'] = -99999999;
+                } else {
+                    hashtag['zScore'] = hashtagScore;
+                }
             }
         });
 

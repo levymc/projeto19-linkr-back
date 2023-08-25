@@ -72,3 +72,24 @@ export async function getFollowingIds(req, res) {
     res.status(500).send({ message: "Error getting following IDs:", error });
   }
 }
+
+export async function getFollowingPosts(req, res) {
+  try {
+    const loggedInUserId = req.params.userId;
+
+    const followingIds = await userRepo.getFollowingIds(loggedInUserId);
+
+    followingIds.push(loggedInUserId);
+
+    const posts = await userRepo.getFollowingPosts(followingIds);
+
+    const response = {
+      posts: posts,
+    };
+
+    if (posts) return res.status(200).json(response);
+  } catch (err) {
+    console.error("Error in getFollowingPosts: ", err);
+    res.status(500).json({ error: "Error in getFollowingPosts: " + err });
+  }
+}
