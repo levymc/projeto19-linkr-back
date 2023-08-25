@@ -9,6 +9,50 @@ export default class PostRepository {
       ORDER BY post."createdAt" DESC LIMIT 20;
     `;
 
+    const queryWithReposts = `
+      SELECT "postUnion".*, "user"."email", "user"."name", "user"."imageUrl"
+      FROM (
+        SELECT
+          "originalPost"."postId",
+          "originalPost"."userId",
+          "originalPost"."content",
+          "originalPost"."postUrl",
+          "originalPost"."imgMetadata",
+          "originalPost"."titleMetadata",
+          "originalPost"."descriptionMetadata",
+          COUNT("reposts".*) AS "repostCount",
+          NULL AS "reposterId",
+          NULL AS "reposterName",
+          "originalPost"."createdAt"
+            FROM "public"."posts" AS "originalPost"
+            LEFT JOIN "reposts" USING ("postId")
+            WHERE "originalPost"."userId" = ANY($1)
+            GROUP BY "originalPost"."postId", "originalPost"."userId"
+        UNION
+        SELECT
+          "repostedPost"."postId",
+          "repostedPost"."userId",
+          "repostedPost"."content",
+          "repostedPost"."postUrl",
+          "repostedPost"."imgMetadata",
+          "repostedPost"."titleMetadata",
+          "repostedPost"."descriptionMetadata",
+          COUNT("reposts".*) AS "repostCount",
+          "repost"."userId" AS "reposterId",
+          "repostUser"."name" AS "reposterName",
+          "repost"."createdAt"
+            FROM "public"."reposts" AS "repost"
+            INNER JOIN "posts" AS "repostedPost" USING ("postId")
+            INNER JOIN "users" AS "repostUser" ON "repostUser"."userId" = "repost"."userId"
+            LEFT JOIN "reposts" USING ("postId")
+            WHERE "repostedPost"."userId" = ANY($1)
+            GROUP BY "repostedPost"."postId", "repost"."userId", "repostUser"."name", "repost"."createdAt"
+      ) AS "postUnion"
+      INNER JOIN "users" AS "user" USING ("userId")
+      ORDER BY "postUnion"."createdAt" DESC
+      LIMIT 20;
+    `
+
     try {
       const result = await db.query(query, [followingIds]);
       return result.rows;
