@@ -540,21 +540,21 @@ ALTER TABLE ONLY public.sessions
 
 -- Repost stuff --
 
-CREATE TABLE "reposts" (
+CREATE TABLE public."reposts" (
     "userId" INTEGER NOT NULL,
-        FOREIGN KEY ("userId") REFERENCES "users"("userId"),
+        FOREIGN KEY ("userId") REFERENCES public."users"("userId"),
     "postId" INTEGER NOT NULL,
-        FOREIGN KEY ("postId") REFERENCES "posts"("postId"),
+        FOREIGN KEY ("postId") REFERENCES public."posts"("postId"),
     "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
 
     PRIMARY KEY ("userId", "postId")
 );
 
-CREATE INDEX reposts_pk_reverse_order_index
-    ON "reposts" ("postId", "userId");
+CREATE INDEX reposts_reverse_order_index
+    ON public."reposts" ("postId", "userId");
 
 CREATE INDEX reposts_pk_reverse_order_index
-    ON "reposts" ("postId", "userId");
+    ON public."reposts" ("postId", "userId");
 
 CREATE INDEX reposts_createdat_index
-    ON "reposts" ("createdAt");
+    ON public."reposts" ("createdAt");
