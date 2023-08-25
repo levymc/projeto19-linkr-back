@@ -1,10 +1,8 @@
 import { db } from "../database/db.connection.js";
 
 export default class PostRepository {
-  async getFollowingPosts(userId) {
-    const followingIdsQuery =
-      'SELECT "followingId" FROM "follows" WHERE "followerId" = $1';
-    const postsQuery = `
+  async getFollowingPosts(followingIds) {
+    const query = `
       SELECT post.*, "user".email, "user".name, "user"."imageUrl" FROM public.posts as post
       LEFT JOIN public.users as "user" on (post."userId" = "user"."userId")
       WHERE post."userId" = ANY($1)
@@ -12,15 +10,8 @@ export default class PostRepository {
     `;
 
     try {
-      const followingIdsResult = await db.query(followingIdsQuery, [userId]);
-      const followingIds = followingIdsResult.rows.map(
-        (row) => row.followingId
-      );
-
-      const postsResult = await db.query(postsQuery, [followingIds]);
-      const posts = postsResult.rows;
-
-      return { posts };
+      const result = await db.query(query, [followingIds]);
+      return result.rows;
     } catch (error) {
       console.error(error);
       return false;
