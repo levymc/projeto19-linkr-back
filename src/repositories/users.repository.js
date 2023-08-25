@@ -50,7 +50,7 @@ export async function getFollowingIds(userId) {
   return result.rows.map((row) => row.followingId);
 }
 
-export async function getFollowingPosts(followingIds) {
+export async function getFollowingPosts(userIds) {
   const query = `
     SELECT post.*, "user".email, "user".name, "user"."imageUrl" FROM public.posts as post
     LEFT JOIN public.users as "user" on (post."userId" = "user"."userId")
@@ -59,7 +59,7 @@ export async function getFollowingPosts(followingIds) {
   `;
 
   try {
-    const result = await db.query(query, [followingIds]);
+    const result = await db.query(query, [userIds]);
     return result.rows;
   } catch (error) {
     console.error(error);
